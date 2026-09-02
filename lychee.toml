@@ -1,0 +1,29 @@
+# Configuração do verificador de links (https://github.com/lycheeverse/lychee)
+# Uso: lychee --no-progress './**/*.md'
+#
+# O LinkedIn responde HTTP 999 a qualquer verificador automatizado (bloqueio anti-bot),
+# mesmo com o perfil no ar.
+# O Facebook responde 200 com curl puro e com a User-Agent curta "Mozilla/5.0",
+# mas responde 400 (Bad Request) com a User-Agent completa de navegador usada
+# abaixo (necessária para outros domínios) — comportamento inconsistente do
+# próprio Facebook, não um link morto (confirmado manualmente nesta sessão).
+# profpietro.com responde 200 de forma consistente via curl com UA de navegador
+# (confirmado repetidas vezes nesta sessão), mas rejeita especificamente o
+# cliente do lychee (403), mesmo com a mesma User-Agent e com retries — é o
+# anti-bot do host (hcdn/hostinger) reconhecendo o fingerprint do lychee, não
+# um link morto.
+exclude = [
+  "^https://www\\.linkedin\\.com/",
+  "^https://www\\.facebook\\.com/",
+  "^https://profpietro\\.com/",
+]
+
+# Alguns sites (ex.: sujeitoprogramador.com, reddit.com) bloqueiam a User-Agent
+# padrão/curta de ferramentas automatizadas mesmo estando no ar (confirmado
+# nesta sessão com curl: HTTP 200 com UA completa de navegador). Uma UA
+# completa evita falsos positivos sem afrouxar a verificação (ainda exige
+# HTTP 200).
+user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36"
+
+max_retries = 5
+retry_wait_time = 5
